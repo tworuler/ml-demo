@@ -8,6 +8,7 @@ import numpy as np
 
 CIFAR10_DATA_PATH = 'datasets/CIFAR10/cifar-10-batches-py'
 
+
 def load_train_data():
     """
     Load training data of CIFAR10.
@@ -15,11 +16,11 @@ def load_train_data():
 
     Returns
     -------
-    X_train: A (50000, 3072) numpy array.
+    X_train: A (50000, 3072) numpy array of float.
              Each row of the array stores a 32x32 colour image.
              The first 1024 entries contain the red channel values,
              the next 1024 the green, and the final 1024 the blue.
-    y_train: A (50000,) numpy array.
+    y_train: A (50000,) numpy array of int in the range 0-9.
     """
     data_path_base = os.path.join(CIFAR10_DATA_PATH, 'data_batch_')
     Xs = []
@@ -32,9 +33,10 @@ def load_train_data():
             y = np.array(data['labels'])
             Xs.append(X)
             ys.append(y)
-    X_train = np.concatenate(Xs)
+    X_train = np.concatenate(Xs).astype('float')
     y_train = np.concatenate(ys)
     return X_train, y_train
+
 
 def load_test_data():
     """
@@ -43,18 +45,19 @@ def load_test_data():
 
     Returns
     -------
-    X_test: A (10000, 3072) numpy array.
+    X_test: A (10000, 3072) numpy array of float.
             Each row of the array stores a 32x32 colour image.
             The first 1024 entries contain the red channel values,
             the next 1024 the green, and the final 1024 the blue.
-    y_test: A (10000,) numpy array.
+    y_test: A (10000,) numpy array in the range 0-9.
     """
     data_path = os.path.join(CIFAR10_DATA_PATH, 'test_batch')
     with open(data_path, 'rb') as f:
         data = pickle.load(f)
-        X_test = data['data']
+        X_test = data['data'].astype('float')
         y_test = np.array(data['labels'])
     return X_test, y_test
+
 
 def load_label_names():
     """
